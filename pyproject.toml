@@ -1,0 +1,40 @@
+# pyproject.toml -- built with love and setuptools
+# one might start their journey with `pip install -e .'[dev]'`
+
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "wizbook"
+version = "0.0.1"
+description = "a tasteful starter for python projects"
+readme = "README.md"
+authors = [{ name="Chris Kerwell Gresla", email="ckgresla@gmail.com" }]
+license = { file="LICENSE" }
+dependencies = [
+    "python-dotenv >= 1.0.0",
+    "rich", # beautiful and helpful stdout- https://github.com/Textualize/rich
+]
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+# Active Development
+dev = [
+	"isort", # sorter of importer statements- https://pycqa.github.io/isort/
+    "pip-tools", # the sensible requirements.txt- https://github.com/jazzband/pip-tools
+	"pytest", # a wizard tests their code- https://github.com/pytest-dev/pytest
+]
+# Publish to PyPI, a few commands and account is all you need 
+# reference- https://realpython.com/pypi-publish-python-package/#build-your-package
+pub = [
+	"build", 
+	"twine",
+]
+
+[project.urls]
+Homepage = "https://github.com/ckgresla/wizbook"
+Issues = "https://github.com/ckgresla/wizbook/issues"
+
