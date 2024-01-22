@@ -1,4 +1,5 @@
-# sample usage here
+# sample usage of the vizualization module here
+# dont believe me, just test: ``
 from wizbook.viz import *
 
 
