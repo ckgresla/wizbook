@@ -8,7 +8,14 @@ Beautiful things are better! This module contains:
 
 import os
 import sys
+import time
+
 from rich.console import Console
+from rich.progress import Progress, track
+from rich.progress import TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn, TimeElapsedColumn, SpinnerColumn
+from rich.theme import Theme
+from rich.text import Text
+from rich.style import Style
 
 
 # Consts et al
@@ -85,3 +92,67 @@ class HiddenPrints:
     # with HiddenPrints():
     #     print("wow")
     # 'wow' will not print
+
+
+
+# a tasteful black and white pbar, ala rich 
+class BWTimeRemainingColumn(TimeRemainingColumn):
+    def render(self, task):
+        remaining = task.time_remaining
+        if remaining is None:
+            return Text.from_markup("[white]?:??:??")
+        return Text.from_markup("[white]{:02}:{:02}:{:02}".format(int(remaining // 3600), int((remaining % 3600) // 60), int(remaining % 60)))
+
+class BWTimeElapsedColumn(TimeElapsedColumn):
+    def render(self, task):
+        elapsed = task.elapsed
+        return Text.from_markup("[white]{:02}:{:02}:{:02}".format(int(elapsed // 3600), int((elapsed % 3600) // 60), int(elapsed % 60)))
+
+bwpbar = Progress(
+    TextColumn("[progress.description]{task.description}"),
+    SpinnerColumn(style=Style(color="white")),
+    BarColumn(
+        complete_style=Style(color="white"),
+        finished_style=Style(color="white"),
+    ),
+    TaskProgressColumn(text_format="[white]{task.percentage:>3.0f}%"),
+
+    # customs, very tasteful
+    BWTimeRemainingColumn(),
+    BWTimeElapsedColumn(),
+    # defaults, not tasteful
+    # TimeRemainingColumn(),
+    # TimeElapsedColumn(),
+)
+
+
+# functional usage (similar to the tqdm api)
+# NOTE: that for enumeration, you have to wrap the *inside* of the enumerate w this func!
+def bw_pbar(iterable, description="grinding...", total=None):
+    """
+    to call like tqdm, one might use as follows 
+    for item in bwpbar_iter(range(100), description='processing...'):
+        # do something
+        ...
+    """
+    CustomProgressBar = Progress(
+        TextColumn("[progress.description]{task.description}"),
+        SpinnerColumn(style=Style(color="white")),
+        BarColumn(
+            complete_style=Style(color="white"),
+            finished_style=Style(color="white"),
+        ),
+        TaskProgressColumn(text_format="[white]{task.percentage:>3.0f}%"),
+        BWTimeRemainingColumn(),
+        BWTimeElapsedColumn(),
+    )
+
+    # actual iteration
+    with CustomProgressBar:
+        task_id = CustomProgressBar.add_task(description, total=total or len(iterable))
+        for item in iterable:
+            yield item
+            CustomProgressBar.advance(task_id)
+
+
+
