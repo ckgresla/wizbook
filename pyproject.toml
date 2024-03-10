@@ -17,6 +17,7 @@ license = { file="LICENSE" }
 dependencies = [
     "python-dotenv >= 1.0.0",
     "rich", # beautiful and helpful stdout- https://github.com/Textualize/rich
+    "art", # easy ascii art- https://pypi.org/project/art/
 ]
 requires-python = ">=3.8"
 
@@ -24,6 +25,7 @@ requires-python = ">=3.8"
 # Active Development
 dev = [
 	"isort", # sorter of importer statements- https://pycqa.github.io/isort/
+    "black", # any color you like...- https://github.com/psf/black
     "pip-tools", # the sensible requirements.txt- https://github.com/jazzband/pip-tools
 	"pytest", # a wizard tests their code- https://github.com/pytest-dev/pytest
 ]
